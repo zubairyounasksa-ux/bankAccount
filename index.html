@@ -5,13 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bank Account Details</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&family=Roboto:wght@400;500;700&family=Lato:wght@400;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 
 <!-- Required for Download Image -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
-        integrity="sha512-BNa5hT+ZUpT6gibR9WvKp9xO7+q3MYo1uT4f6gM+ap1Cq4X1Q+3x4A8X0JHef0mxFwlG7VY7Q3u/QZQ3qZ0hfw=="
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
   :root {
@@ -33,7 +30,13 @@
     --download-bg: linear-gradient(145deg, #0A1628 0%, #0D1F3C 50%, #0A1628 100%);
     --download-bg-solid: #0A1628;
     --dl-font-size: 100%;
+    --dl-scale: 1;
     --dl-letter-spacing: 0px;
+    --dl-font-family: 'DM Sans', sans-serif;
+    --dl-mono-family: 'DM Mono', monospace;
+    --dl-font-style: normal;
+    --dl-font-weight: 400;
+    --dl-heading-weight: 700;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -122,7 +125,7 @@
     margin: 0 auto 36px;
     padding: 16px;
     display: grid;
-    grid-template-columns: repeat(4, minmax(180px, 1fr));
+    grid-template-columns: repeat(6, minmax(150px, 1fr));
     gap: 14px;
     background: rgba(255,255,255,.025);
     border: 1px solid rgba(201,168,76,.18);
@@ -245,7 +248,7 @@
   .field-value.large {
     font-family: 'DM Sans', sans-serif;
     font-size: 16px;
-    font-weight: 600;
+    font-weight: var(--dl-heading-weight);
     font-variant-numeric: normal;
     letter-spacing: normal;
   }
@@ -358,7 +361,9 @@
     width: 1200px;
     background: var(--download-bg);
     padding: 50px;
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--dl-font-family);
+    font-style: var(--dl-font-style);
+    font-weight: var(--dl-font-weight);
     color: #fff;
     position: relative;
     overflow: hidden;
@@ -392,16 +397,16 @@
     position: relative; z-index: 1;
   }
   .dl-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 30px;
-    font-weight: 700;
+    font-family: var(--dl-font-family);
+    font-size: calc(30px * var(--dl-scale));
+    font-weight: var(--dl-heading-weight);
     background: linear-gradient(135deg, #C9A84C, #F5E9C8);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
   .dl-subtitle {
-    font-size: 12px;
+    font-size: calc(12px * var(--dl-scale));
     letter-spacing: calc(2px + var(--dl-letter-spacing));
     text-transform: uppercase;
     color: rgba(255,255,255,.4);
@@ -412,7 +417,7 @@
     border-radius: 14px;
     background: linear-gradient(135deg, #C9A84C, #E8C96B);
     display: flex; align-items: center; justify-content: center;
-    font-size: 22px; font-weight: 700; color: #000;
+    font-size: calc(22px * var(--dl-scale)); font-weight: var(--dl-heading-weight); color: #000;
   }
 
   /* FIX: Always exactly 3 cards in one row for preview and export */
@@ -449,37 +454,37 @@
     width: 38px; height: 38px;
     border-radius: 9px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 15px; font-weight: 700;
+    font-size: calc(15px * var(--dl-scale)); font-weight: var(--dl-heading-weight);
     flex-shrink: 0;
   }
-  .dl-bank-name { font-size: 14px; font-weight: 600; color: #fff; }
+  .dl-bank-name { font-size: calc(14px * var(--dl-scale)); font-weight: var(--dl-heading-weight); color: #fff; }
   .dl-bank-type {
-    font-size: 10px;
+    font-size: calc(10px * var(--dl-scale));
     color: rgba(255,255,255,.4);
     letter-spacing: calc(1px + var(--dl-letter-spacing));
     text-transform: uppercase;
   }
   .dl-field { margin-bottom: 10px; }
   .dl-field-label {
-    font-size: 9px;
+    font-size: calc(9px * var(--dl-scale));
     letter-spacing: calc(1.5px + var(--dl-letter-spacing));
     text-transform: uppercase;
     color: #C9A84C;
     margin-bottom: 2px;
-    font-weight: 500;
+    font-weight: var(--dl-heading-weight);
   }
   .dl-field-value {
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
+    font-family: var(--dl-mono-family);
+    font-size: calc(12px * var(--dl-scale));
     color: rgba(255,255,255,.85);
     word-break: break-word;
     line-height: 1.45;
     letter-spacing: var(--dl-letter-spacing);
   }
   .dl-field-value.name {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
+    font-family: var(--dl-font-family);
+    font-size: calc(14px * var(--dl-scale));
+    font-weight: var(--dl-heading-weight);
     font-variant-numeric: normal;
   }
   .dl-footer {
@@ -493,11 +498,11 @@
     position: relative; z-index: 1;
   }
   .dl-footer-text {
-    font-size: 11px;
+    font-size: calc(11px * var(--dl-scale));
     color: rgba(255,255,255,.25);
     letter-spacing: calc(1px + var(--dl-letter-spacing));
   }
-  .dl-footer-date { font-size: 11px; color: rgba(255,255,255,.25); }
+  .dl-footer-date { font-size: calc(11px * var(--dl-scale)); color: rgba(255,255,255,.25); }
 
   .theme-raast  { background: #1E6E6E; color: #fff; }
   .theme-jazz   { background: #7B1FA2; color: #fff; }
@@ -554,6 +559,35 @@
 </div>
 
 <div class="control-panel">
+  <div class="control-group">
+    <label>Download Font</label>
+    <select id="fontFamilyControl">
+      <option value="'DM Sans', sans-serif">DM Sans</option>
+      <option value="'Inter', sans-serif">Inter</option>
+      <option value="'Poppins', sans-serif">Poppins</option>
+      <option value="'Montserrat', sans-serif">Montserrat</option>
+      <option value="'Manrope', sans-serif">Manrope</option>
+      <option value="'Outfit', sans-serif">Outfit</option>
+      <option value="'Roboto', sans-serif">Roboto</option>
+      <option value="'Lato', sans-serif">Lato</option>
+      <option value="'Nunito Sans', sans-serif">Nunito Sans</option>
+      <option value="'Playfair Display', serif">Playfair Display</option>
+    </select>
+  </div>
+
+  <div class="control-group">
+    <label>Font Style</label>
+    <select id="fontStyleControl">
+      <option value="normal">Normal</option>
+      <option value="medium">Medium</option>
+      <option value="semibold">Semi Bold</option>
+      <option value="bold">Bold</option>
+      <option value="italic">Italic</option>
+      <option value="bolditalic">Bold Italic</option>
+      <option value="serifpremium">Premium Serif Heading</option>
+    </select>
+  </div>
+
   <div class="control-group">
     <label>Font Size <span class="control-value" id="fontSizeLabel">100%</span></label>
     <input type="range" id="fontSizeControl" min="85" max="125" value="100" step="1">
@@ -725,6 +759,18 @@ function escapeHTML(value) {
 }
 
 function getDownloadSettings() {
+  const fontFamily = document.getElementById('fontFamilyControl').value || "'DM Sans', sans-serif";
+  const fontStyleValue = document.getElementById('fontStyleControl').value || 'normal';
+  const styleMap = {
+    normal: { fontStyle: 'normal', fontWeight: 400, headingWeight: 700, titleFamily: fontFamily },
+    medium: { fontStyle: 'normal', fontWeight: 500, headingWeight: 700, titleFamily: fontFamily },
+    semibold: { fontStyle: 'normal', fontWeight: 600, headingWeight: 700, titleFamily: fontFamily },
+    bold: { fontStyle: 'normal', fontWeight: 700, headingWeight: 700, titleFamily: fontFamily },
+    italic: { fontStyle: 'italic', fontWeight: 400, headingWeight: 700, titleFamily: fontFamily },
+    bolditalic: { fontStyle: 'italic', fontWeight: 700, headingWeight: 700, titleFamily: fontFamily },
+    serifpremium: { fontStyle: 'normal', fontWeight: 400, headingWeight: 700, titleFamily: "'Playfair Display', serif" }
+  };
+  const fontStyleConfig = styleMap[fontStyleValue] || styleMap.normal;
   const fontSize = Number(document.getElementById('fontSizeControl').value || 100);
   const letterSpacing = Number(document.getElementById('letterSpacingControl').value || 0);
   const bgKey = document.getElementById('downloadBgSelect').value;
@@ -732,6 +778,11 @@ function getDownloadSettings() {
 
   if (bgKey === 'custom') {
     return {
+      fontFamily,
+      titleFamily: fontStyleConfig.titleFamily,
+      fontStyle: fontStyleConfig.fontStyle,
+      fontWeight: fontStyleConfig.fontWeight,
+      headingWeight: fontStyleConfig.headingWeight,
       fontSize,
       letterSpacing,
       bgCss: custom,
@@ -742,6 +793,11 @@ function getDownloadSettings() {
 
   const bg = BG_THEMES[bgKey] || BG_THEMES.navy;
   return {
+    fontFamily,
+    titleFamily: fontStyleConfig.titleFamily,
+    fontStyle: fontStyleConfig.fontStyle,
+    fontWeight: fontStyleConfig.fontWeight,
+    headingWeight: fontStyleConfig.headingWeight,
     fontSize,
     letterSpacing,
     bgCss: bg.css,
@@ -925,6 +981,24 @@ function buildDownloadHTML() {
   </div>`;
 }
 
+
+function applyTypographyToDownload(root) {
+  if (!root) return;
+  const s = getDownloadSettings();
+  root.style.setProperty('--dl-font-size', `${s.fontSize}%`);
+  root.style.setProperty('--dl-scale', `${s.fontSize / 100}`);
+  root.style.setProperty('--dl-letter-spacing', `${s.letterSpacing}px`);
+  root.style.setProperty('--dl-font-family', s.fontFamily);
+  root.style.setProperty('--dl-font-style', s.fontStyle);
+  root.style.setProperty('--dl-font-weight', s.fontWeight);
+  root.style.setProperty('--dl-heading-weight', s.headingWeight);
+  root.style.fontFamily = s.fontFamily;
+  root.style.fontStyle = s.fontStyle;
+  root.style.fontWeight = s.fontWeight;
+  const title = root.querySelector('.dl-title');
+  if (title) title.style.fontFamily = s.titleFamily;
+}
+
 function buildPreview() {
   const wrap = document.getElementById('previewWrap');
   wrap.innerHTML = buildDownloadHTML();
@@ -933,6 +1007,7 @@ function buildPreview() {
   const card = wrap.querySelector('.dl-card');
   if (card) {
     card.style.background = s.bgCss;
+    applyTypographyToDownload(card);
   }
 
   if (s.textMode === 'light') {
@@ -957,6 +1032,46 @@ function makeLightDownloadReadable(root) {
   });
 }
 
+
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const existing = Array.from(document.scripts).find(s => s.src === src);
+    if (existing) {
+      existing.addEventListener('load', resolve, { once: true });
+      existing.addEventListener('error', reject, { once: true });
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = src;
+    script.async = true;
+    script.onload = resolve;
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
+}
+
+async function ensureHtml2CanvasLoaded() {
+  if (typeof html2canvas !== 'undefined') return true;
+
+  const sources = [
+    'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js',
+    'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js',
+    'https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js'
+  ];
+
+  for (const src of sources) {
+    try {
+      await loadScript(src);
+      if (typeof html2canvas !== 'undefined') return true;
+    } catch (error) {
+      console.warn('html2canvas source failed:', src, error);
+    }
+  }
+
+  return false;
+}
+
 async function ensureFontsReady() {
   if (document.fonts && document.fonts.ready) {
     await document.fonts.ready;
@@ -966,8 +1081,9 @@ async function ensureFontsReady() {
 async function downloadImage() {
   applyDownloadSettings();
 
-  if (typeof html2canvas === 'undefined') {
-    alert('html2canvas is not loaded. Please check your internet connection or CDN access.');
+  const html2canvasReady = await ensureHtml2CanvasLoaded();
+  if (!html2canvasReady) {
+    alert('html2canvas could not be loaded. Please check your internet connection or allow CDN scripts, then try again.');
     return;
   }
 
@@ -977,6 +1093,7 @@ async function downloadImage() {
   const s = getDownloadSettings();
   const el = holder.querySelector('.dl-card');
   el.style.background = s.bgCss;
+  applyTypographyToDownload(el);
 
   if (s.textMode === 'light') {
     makeLightDownloadReadable(el);
@@ -1003,6 +1120,8 @@ async function downloadImage() {
   holder.innerHTML = '';
 }
 
+document.getElementById('fontFamilyControl').addEventListener('change', applyDownloadSettings);
+document.getElementById('fontStyleControl').addEventListener('change', applyDownloadSettings);
 document.getElementById('fontSizeControl').addEventListener('input', applyDownloadSettings);
 document.getElementById('letterSpacingControl').addEventListener('input', applyDownloadSettings);
 document.getElementById('downloadBgSelect').addEventListener('change', applyDownloadSettings);
