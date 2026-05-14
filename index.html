@@ -1,238 +1,758 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FinSight Financial Analyzer</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bank Account Details</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C96B;
+    --gold-pale: #F5E9C8;
+    --dark: #0D1117;
+    --dark-2: #161B22;
+    --dark-3: #21262D;
+    --card-bg: #1C2128;
+    --border: rgba(201,168,76,0.25);
+    --text: #E6EDF3;
+    --text-muted: #8B949E;
+    --green: #1A6B4A;
+    --green-light: #2EA669;
+    --radius: 16px;
+  }
 
-    html,
-    body {
-      width: 100%;
-      min-height: 100%;
-      font-family: Arial, Helvetica, sans-serif;
-      background: #f4f7fb;
-      overflow: hidden;
-    }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    .app-shell {
-      width: 100%;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      background: #f4f7fb;
-    }
+  body {
+    background: var(--dark);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    padding: 32px 16px 60px;
+  }
 
-    .top-bar {
-      height: 58px;
-      background: linear-gradient(135deg, #083344, #0f766e);
-      color: #ffffff;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 18px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
-      z-index: 2;
-    }
+  /* ── Header ── */
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .header-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+    color: #000;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    padding: 6px 20px;
+    border-radius: 100px;
+    margin-bottom: 14px;
+  }
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 5vw, 44px);
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--gold-light), #fff 50%, var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.15;
+  }
+  .header p {
+    color: var(--text-muted);
+    margin-top: 10px;
+    font-size: 14px;
+  }
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-width: 0;
-    }
+  /* ── Toolbar ── */
+  .toolbar {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 36px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 22px;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all .2s;
+  }
+  .btn-gold {
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color: #000;
+  }
+  .btn-gold:hover { filter: brightness(1.1); transform: translateY(-1px); }
+  .btn-outline {
+    background: transparent;
+    border: 1.5px solid var(--border);
+    color: var(--gold);
+  }
+  .btn-outline:hover { background: rgba(201,168,76,.08); transform: translateY(-1px); }
+  .btn-green {
+    background: linear-gradient(135deg, var(--green), var(--green-light));
+    color: #fff;
+  }
+  .btn-green:hover { filter: brightness(1.1); transform: translateY(-1px); }
 
-    .brand-icon {
-      width: 34px;
-      height: 34px;
-      border-radius: 9px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(255, 255, 255, 0.16);
-      font-weight: 800;
-      letter-spacing: 0.5px;
-      flex: 0 0 auto;
-    }
+  /* ── Cards Grid ── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 20px;
+    max-width: 1100px;
+    margin: 0 auto 40px;
+  }
 
-    .brand-text h1 {
-      font-size: 16px;
-      line-height: 1.2;
-      font-weight: 700;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+  .account-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .account-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+  }
+  .account-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0,0,0,.4);
+  }
 
-    .brand-text p {
-      font-size: 11px;
-      opacity: 0.75;
-      margin-top: 1px;
-      white-space: nowrap;
-    }
+  .card-bank-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .bank-icon {
+    width: 42px; height: 42px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .bank-name {
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--text);
+  }
+  .bank-type {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
 
-    .actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex: 0 0 auto;
-    }
+  .card-field { margin-bottom: 14px; }
+  .field-label {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+  .field-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 13.5px;
+    color: var(--text);
+    word-break: break-all;
+    line-height: 1.5;
+  }
+  .field-value.large {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    font-variant-numeric: normal;
+    letter-spacing: normal;
+  }
 
-    .btn {
-      border: 1px solid rgba(255, 255, 255, 0.35);
-      background: rgba(255, 255, 255, 0.12);
-      color: #ffffff;
-      padding: 8px 12px;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
-      transition: 0.2s ease;
-    }
+  .card-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255,255,255,.06);
+  }
+  .card-btn {
+    flex: 1;
+    padding: 8px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1.5px solid var(--border);
+    background: transparent;
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    transition: all .2s;
+    display: flex; align-items: center; justify-content: center; gap: 5px;
+  }
+  .card-btn:hover { background: rgba(255,255,255,.05); color: var(--text); }
+  .card-btn.danger:hover { border-color: #f85149; color: #f85149; background: rgba(248,81,73,.05); }
 
-    .btn:hover {
-      background: rgba(255, 255, 255, 0.22);
-    }
+  /* ── Modal ── */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.7);
+    backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 100;
+    padding: 16px;
+    opacity: 0; pointer-events: none;
+    transition: opacity .25s;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal {
+    background: var(--dark-2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px;
+    width: 100%; max-width: 480px;
+    transform: translateY(20px);
+    transition: transform .25s;
+  }
+  .modal-overlay.open .modal { transform: translateY(0); }
+  .modal h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    margin-bottom: 24px;
+    color: var(--gold-light);
+  }
+  .form-group { margin-bottom: 16px; }
+  .form-group label {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  .form-group input, .form-group select {
+    width: 100%;
+    background: var(--dark-3);
+    border: 1.5px solid rgba(255,255,255,.1);
+    border-radius: 10px;
+    padding: 11px 14px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color .2s;
+  }
+  .form-group input:focus, .form-group select:focus {
+    border-color: var(--gold);
+  }
+  .form-group select option { background: var(--dark-2); }
+  .modal-actions { display: flex; gap: 10px; margin-top: 24px; }
+  .modal-actions .btn { flex: 1; justify-content: center; }
 
-    .frame-wrap {
-      position: relative;
-      flex: 1;
-      min-height: 0;
-    }
+  /* ── Preview Modal ── */
+  #previewModal .modal { max-width: 700px; }
+  .preview-wrap {
+    overflow: auto;
+    margin-top: 20px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
 
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: 0;
-      display: block;
-      background: #ffffff;
-    }
+  /* ── Download Card (rendered offscreen) ── */
+  #downloadCanvas {
+    position: fixed;
+    left: -9999px;
+    top: 0;
+    width: 900px;
+  }
 
-    .loader {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #f4f7fb;
-      z-index: 1;
-      transition: opacity 0.25s ease, visibility 0.25s ease;
-    }
+  .dl-card {
+    background: linear-gradient(145deg, #0A1628 0%, #0D1F3C 50%, #0A1628 100%);
+    padding: 50px;
+    font-family: 'DM Sans', sans-serif;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .dl-card::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,168,76,.12) 0%, transparent 70%);
+  }
+  .dl-card::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: -80px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(26,107,74,.15) 0%, transparent 70%);
+  }
+  .dl-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 28px;
+    border-bottom: 1px solid rgba(201,168,76,.3);
+    margin-bottom: 32px;
+    position: relative; z-index: 1;
+  }
+  .dl-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 30px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #C9A84C, #F5E9C8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .dl-subtitle {
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.4);
+    margin-top: 4px;
+  }
+  .dl-logo-mark {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #C9A84C, #E8C96B);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 700; color: #000;
+  }
+  .dl-accounts {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(370px, 1fr));
+    gap: 18px;
+    position: relative; z-index: 1;
+  }
+  .dl-account {
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(201,168,76,.2);
+    border-radius: 14px;
+    padding: 20px 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  .dl-account::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #C9A84C, #E8C96B, #C9A84C);
+  }
+  .dl-acc-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .dl-bank-icon {
+    width: 38px; height: 38px;
+    border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: 700;
+    flex-shrink: 0;
+  }
+  .dl-bank-name { font-size: 14px; font-weight: 600; color: #fff; }
+  .dl-bank-type { font-size: 10px; color: rgba(255,255,255,.4); letter-spacing: 1px; text-transform: uppercase; }
+  .dl-field { margin-bottom: 10px; }
+  .dl-field-label { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #C9A84C; margin-bottom: 2px; font-weight: 500; }
+  .dl-field-value { font-family: 'DM Mono', monospace; font-size: 12px; color: rgba(255,255,255,.85); word-break: break-all; }
+  .dl-field-value.name { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; font-variant-numeric: normal; }
+  .dl-footer {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(201,168,76,.15);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative; z-index: 1;
+  }
+  .dl-footer-text { font-size: 11px; color: rgba(255,255,255,.25); letter-spacing: 1px; }
+  .dl-footer-date { font-size: 11px; color: rgba(255,255,255,.25); }
 
-    .loader.hidden {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
+  /* bank color themes */
+  .theme-raast  { background: #1E6E6E; color: #fff; }
+  .theme-jazz   { background: #7B1FA2; color: #fff; }
+  .theme-meezan { background: #1B5E20; color: #fff; }
+  .theme-hbl    { background: #B71C1C; color: #fff; }
+  .theme-uba    { background: #E65100; color: #fff; }
+  .theme-other  { background: #283593; color: #fff; }
 
-    .loader-card {
-      background: #ffffff;
-      border: 1px solid #e5e7eb;
-      border-radius: 14px;
-      padding: 24px 28px;
-      text-align: center;
-      box-shadow: 0 12px 35px rgba(15, 23, 42, 0.12);
-    }
+  /* empty state */
+  .empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-muted);
+    grid-column: 1 / -1;
+  }
+  .empty svg { opacity: .3; margin-bottom: 16px; }
+  .empty p { font-size: 14px; }
 
-    .spinner {
-      width: 34px;
-      height: 34px;
-      border: 4px solid #dbeafe;
-      border-top-color: #0f766e;
-      border-radius: 50%;
-      margin: 0 auto 12px;
-      animation: spin 0.8s linear infinite;
-    }
-
-    .loader-card h2 {
-      font-size: 15px;
-      color: #0f172a;
-      margin-bottom: 4px;
-    }
-
-    .loader-card p {
-      font-size: 12px;
-      color: #64748b;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    @media (max-width: 640px) {
-      .top-bar {
-        height: 54px;
-        padding: 0 12px;
-      }
-
-      .brand-text h1 {
-        font-size: 14px;
-      }
-
-      .brand-text p {
-        display: none;
-      }
-
-      .btn {
-        padding: 7px 9px;
-        font-size: 12px;
-      }
-    }
-  </style>
+  @media (max-width: 480px) {
+    .cards-grid { grid-template-columns: 1fr; }
+  }
+</style>
 </head>
 <body>
-  <div class="app-shell">
-    <header class="top-bar">
-      <div class="brand">
-        <div class="brand-icon">YC</div>
-        <div class="brand-text">
-          <h1>FinSight Financial Analyzer</h1>
-          <p>Youngs Capital — AI Financial Screenshot System</p>
-        </div>
-      </div>
-      <div class="actions">
-        <button class="btn" type="button" onclick="reloadApp()">Refresh</button>
-        <a class="btn" href="https://script.google.com/macros/s/AKfycbzxncaxpw-W_k-3e6QYyztaK9lsso70QERBVSd-usC-Hr-w8PhHMJovF1t8By1SVVLo0g/exec" target="_blank" rel="noopener">Open Full App</a>
-      </div>
-    </header>
 
-    <main class="frame-wrap">
-      <div class="loader" id="loader">
-        <div class="loader-card">
-          <div class="spinner"></div>
-          <h2>Loading FinSight...</h2>
-          <p>Please wait while the financial analyzer opens.</p>
-        </div>
-      </div>
+<div class="header">
+  <div class="header-badge">💳 Payment Details</div>
+  <h1>Bank Account Manager</h1>
+  <p>Manage, preview & share your payment details beautifully</p>
+</div>
 
-      <iframe
-        id="finsightFrame"
-        src="https://script.google.com/macros/s/AKfycbzxncaxpw-W_k-3e6QYyztaK9lsso70QERBVSd-usC-Hr-w8PhHMJovF1t8By1SVVLo0g/exec"
-        title="FinSight Financial Analyzer"
-        allow="clipboard-read; clipboard-write; fullscreen"
-        onload="hideLoader()">
-      </iframe>
-    </main>
+<div class="toolbar">
+  <button class="btn btn-gold" onclick="openAddModal()">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    Add Account
+  </button>
+  <button class="btn btn-outline" onclick="openPreview()">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+    Preview
+  </button>
+  <button class="btn btn-green" onclick="downloadImage()">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+    Download Image
+  </button>
+</div>
+
+<div class="cards-grid" id="cardsGrid"></div>
+
+<!-- Add Modal -->
+<div class="modal-overlay" id="addModal">
+  <div class="modal">
+    <h2 id="modalTitle">Add New Account</h2>
+    <div class="form-group">
+      <label>Bank / Service Name</label>
+      <input type="text" id="f_bank" placeholder="e.g. Meezan Bank, JazzCash…">
+    </div>
+    <div class="form-group">
+      <label>Account Type</label>
+      <select id="f_type">
+        <option value="raast">Raast ID</option>
+        <option value="jazz">JazzCash / Mobile Wallet</option>
+        <option value="meezan">Islamic Bank</option>
+        <option value="hbl">Commercial Bank</option>
+        <option value="uba">Digital Bank</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Account Holder Name</label>
+      <input type="text" id="f_name" placeholder="Full name">
+    </div>
+    <div class="form-group">
+      <label>Account / ID Number</label>
+      <input type="text" id="f_number" placeholder="Account or phone number">
+    </div>
+    <div class="form-group">
+      <label>IBAN (optional)</label>
+      <input type="text" id="f_iban" placeholder="PK00XXXX0000000000000000">
+    </div>
+    <div class="form-group">
+      <label>Branch (optional)</label>
+      <input type="text" id="f_branch" placeholder="Branch name">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal('addModal')">Cancel</button>
+      <button class="btn btn-gold" onclick="saveAccount()">Save Account</button>
+    </div>
   </div>
+</div>
 
-  <script>
-    const frame = document.getElementById('finsightFrame');
-    const loader = document.getElementById('loader');
+<!-- Preview Modal -->
+<div class="modal-overlay" id="previewModal">
+  <div class="modal" style="max-width:720px;">
+    <h2>Preview — Download Card</h2>
+    <div class="preview-wrap" id="previewWrap"></div>
+    <div class="modal-actions" style="margin-top:16px;">
+      <button class="btn btn-outline" onclick="closeModal('previewModal')">Close</button>
+      <button class="btn btn-green" onclick="downloadImage()">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download
+      </button>
+    </div>
+  </div>
+</div>
 
-    function hideLoader() {
-      loader.classList.add('hidden');
-    }
+<!-- Hidden download canvas -->
+<div id="downloadCanvas"></div>
 
-    function reloadApp() {
-      loader.classList.remove('hidden');
-      frame.src = frame.src;
-    }
-  </script>
+<script>
+const BANK_THEMES = {
+  raast:     { bg:'#0D4A4A', text:'#4ECDC4', emoji:'🔗', label:'Raast' },
+  jazz:      { bg:'#4A0E6B', text:'#CE93D8', emoji:'📱', label:'JazzCash' },
+  easypaisa: { bg:'#0A3D1F', text:'#4CAF50', emoji:'💚', label:'Digital Bank' },
+  meezan:    { bg:'#1B3A1F', text:'#66BB6A', emoji:'🏦', label:'Islamic Bank' },
+  hbl:       { bg:'#4A0C0C', text:'#EF9A9A', emoji:'🏛️', label:'Commercial' },
+  uba:       { bg:'#4A2800', text:'#FFCC80', emoji:'💳', label:'Digital' },
+  other:     { bg:'#1A237E', text:'#90CAF9', emoji:'🏦', label:'Banking' },
+};
+
+let accounts = [
+  {
+    id: 1,
+    bank: 'Raast',
+    type: 'raast',
+    name: 'Mir Aarib Traders',
+    number: '03004493015',
+    iban: '',
+    branch: ''
+  },
+  {
+    id: 2,
+    bank: 'JazzCash',
+    type: 'jazz',
+    name: 'Muhammad Zakir Hussain',
+    number: '03325275150',
+    iban: 'PK10JCMA1510923325275150',
+    branch: ''
+  },
+  {
+    id: 3,
+    bank: 'Meezan Bank',
+    type: 'meezan',
+    name: 'MUHAMMAD ZAKIR HUSSAIN',
+    number: '98810103802374',
+    iban: 'PK50MEZN0098810103802374',
+    branch: 'QUAIDABAD BR SRG'
+  }
+];
+
+let editingId = null;
+
+function render() {
+  const grid = document.getElementById('cardsGrid');
+  if (!accounts.length) {
+    grid.innerHTML = `<div class="empty">
+      <svg width="60" height="60" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="3"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+      <p>No accounts yet. Click <strong>Add Account</strong> to get started.</p>
+    </div>`;
+    return;
+  }
+  grid.innerHTML = accounts.map(a => {
+    const theme = BANK_THEMES[a.type] || BANK_THEMES.other;
+    return `
+    <div class="account-card" id="card-${a.id}">
+      <div class="card-bank-logo">
+        <div class="bank-icon" style="background:${theme.bg}; color:${theme.text}">${theme.emoji}</div>
+        <div>
+          <div class="bank-name">${a.bank}</div>
+          <div class="bank-type">${theme.label}</div>
+        </div>
+      </div>
+      <div class="card-field">
+        <div class="field-label">Account Holder</div>
+        <div class="field-value large">${a.name}</div>
+      </div>
+      <div class="card-field">
+        <div class="field-label">${a.type === 'raast' ? 'Raast ID' : 'Account / Mobile No.'}</div>
+        <div class="field-value">${a.number}</div>
+      </div>
+      ${a.iban ? `<div class="card-field"><div class="field-label">IBAN</div><div class="field-value">${a.iban}</div></div>` : ''}
+      ${a.branch ? `<div class="card-field"><div class="field-label">Branch</div><div class="field-value">${a.branch}</div></div>` : ''}
+      <div class="card-actions">
+        <button class="card-btn" onclick="editAccount(${a.id})">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Edit
+        </button>
+        <button class="card-btn danger" onclick="deleteAccount(${a.id})">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+          Remove
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openAddModal() {
+  editingId = null;
+  document.getElementById('modalTitle').textContent = 'Add New Account';
+  ['f_bank','f_name','f_number','f_iban','f_branch'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('f_type').value = 'other';
+  document.getElementById('addModal').classList.add('open');
+}
+
+function editAccount(id) {
+  editingId = id;
+  const a = accounts.find(x => x.id === id);
+  document.getElementById('modalTitle').textContent = 'Edit Account';
+  document.getElementById('f_bank').value = a.bank;
+  document.getElementById('f_type').value = a.type;
+  document.getElementById('f_name').value = a.name;
+  document.getElementById('f_number').value = a.number;
+  document.getElementById('f_iban').value = a.iban || '';
+  document.getElementById('f_branch').value = a.branch || '';
+  document.getElementById('addModal').classList.add('open');
+}
+
+function saveAccount() {
+  const bank   = document.getElementById('f_bank').value.trim();
+  const name   = document.getElementById('f_name').value.trim();
+  const number = document.getElementById('f_number').value.trim();
+  if (!bank || !name || !number) { alert('Please fill Bank Name, Account Holder, and Account Number.'); return; }
+
+  const data = {
+    bank, name, number,
+    type:   document.getElementById('f_type').value,
+    iban:   document.getElementById('f_iban').value.trim(),
+    branch: document.getElementById('f_branch').value.trim(),
+  };
+
+  if (editingId) {
+    const idx = accounts.findIndex(x => x.id === editingId);
+    accounts[idx] = { ...accounts[idx], ...data };
+  } else {
+    accounts.push({ id: Date.now(), ...data });
+  }
+  closeModal('addModal');
+  render();
+}
+
+function deleteAccount(id) {
+  if (!confirm('Remove this account?')) return;
+  accounts = accounts.filter(x => x.id !== id);
+  render();
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+// Close on backdrop click
+document.querySelectorAll('.modal-overlay').forEach(el => {
+  el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); });
+});
+
+function buildDownloadHTML() {
+  const now = new Date().toLocaleDateString('en-PK', { year:'numeric', month:'long', day:'numeric' });
+  const rows = accounts.map(a => {
+    const theme = BANK_THEMES[a.type] || BANK_THEMES.other;
+    return `
+    <div class="dl-account">
+      <div class="dl-acc-header">
+        <div class="dl-bank-icon" style="background:${theme.bg}; color:${theme.text}">${theme.emoji}</div>
+        <div>
+          <div class="dl-bank-name">${a.bank}</div>
+          <div class="dl-bank-type">${theme.label}</div>
+        </div>
+      </div>
+      <div class="dl-field"><div class="dl-field-label">Account Holder</div><div class="dl-field-value name">${a.name}</div></div>
+      <div class="dl-field"><div class="dl-field-label">${a.type === 'raast' ? 'Raast ID' : 'Account / Mobile'}</div><div class="dl-field-value">${a.number}</div></div>
+      ${a.iban ? `<div class="dl-field"><div class="dl-field-label">IBAN</div><div class="dl-field-value">${a.iban}</div></div>` : ''}
+      ${a.branch ? `<div class="dl-field"><div class="dl-field-label">Branch</div><div class="dl-field-value">${a.branch}</div></div>` : ''}
+    </div>`;
+  }).join('');
+
+  return `
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <div class="dl-card">
+    <div class="dl-header">
+      <div>
+        <div class="dl-title">Payment Details</div>
+        <div class="dl-subtitle">Bank Account Information</div>
+      </div>
+      <div class="dl-logo-mark">💳</div>
+    </div>
+    <div class="dl-accounts">${rows}</div>
+    <div class="dl-footer">
+      <div class="dl-footer-text">CONFIDENTIAL · FOR PAYMENT PURPOSES ONLY</div>
+      <div class="dl-footer-date">${now}</div>
+    </div>
+  </div>`;
+}
+
+function openPreview() {
+  const wrap = document.getElementById('previewWrap');
+  const styles = `<style>
+    * { box-sizing:border-box; margin:0; padding:0; }
+    .dl-card { background: linear-gradient(145deg,#0A1628 0%,#0D1F3C 50%,#0A1628 100%); padding:36px; font-family:'DM Sans',sans-serif; color:#fff; position:relative; overflow:hidden; }
+    .dl-card::before { content:''; position:absolute; top:-80px; right:-80px; width:300px; height:300px; border-radius:50%; background:radial-gradient(circle,rgba(201,168,76,.12) 0%,transparent 70%); }
+    .dl-header { display:flex; align-items:center; justify-content:space-between; padding-bottom:20px; border-bottom:1px solid rgba(201,168,76,.3); margin-bottom:24px; }
+    .dl-title { font-family:'Playfair Display',serif; font-size:22px; font-weight:700; background:linear-gradient(135deg,#C9A84C,#F5E9C8); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .dl-subtitle { font-size:10px; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,.4); margin-top:3px; }
+    .dl-logo-mark { width:42px; height:42px; border-radius:10px; background:linear-gradient(135deg,#C9A84C,#E8C96B); display:flex; align-items:center; justify-content:center; font-size:18px; }
+    .dl-accounts { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:14px; }
+    .dl-account { background:rgba(255,255,255,.04); border:1px solid rgba(201,168,76,.2); border-radius:12px; padding:16px; position:relative; overflow:hidden; }
+    .dl-account::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,#C9A84C,#E8C96B,#C9A84C); }
+    .dl-acc-header { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+    .dl-bank-icon { width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; flex-shrink:0; }
+    .dl-bank-name { font-size:13px; font-weight:600; color:#fff; }
+    .dl-bank-type { font-size:9px; color:rgba(255,255,255,.4); letter-spacing:1px; text-transform:uppercase; }
+    .dl-field { margin-bottom:8px; }
+    .dl-field-label { font-size:8px; letter-spacing:1.5px; text-transform:uppercase; color:#C9A84C; margin-bottom:2px; font-weight:500; }
+    .dl-field-value { font-family:'DM Mono',monospace; font-size:11px; color:rgba(255,255,255,.85); word-break:break-all; }
+    .dl-field-value.name { font-family:'DM Sans',sans-serif; font-size:12px; font-weight:600; }
+    .dl-footer { margin-top:22px; padding-top:16px; border-top:1px solid rgba(201,168,76,.15); display:flex; align-items:center; justify-content:space-between; }
+    .dl-footer-text,.dl-footer-date { font-size:9px; color:rgba(255,255,255,.25); letter-spacing:1px; }
+  </style>`;
+  wrap.innerHTML = styles + buildDownloadHTML();
+  document.getElementById('previewModal').classList.add('open');
+}
+
+async function downloadImage() {
+  const canvas = document.getElementById('downloadCanvas');
+  const styles = `<style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+    * { box-sizing:border-box; margin:0; padding:0; }
+    .dl-card { background:linear-gradient(145deg,#0A1628 0%,#0D1F3C 50%,#0A1628 100%); padding:50px; font-family:'DM Sans',sans-serif; color:#fff; position:relative; overflow:hidden; }
+    .dl-card::before { content:''; position:absolute; top:-100px; right:-100px; width:400px; height:400px; border-radius:50%; background:radial-gradient(circle,rgba(201,168,76,.12) 0%,transparent 70%); pointer-events:none; }
+    .dl-header { display:flex; align-items:center; justify-content:space-between; padding-bottom:28px; border-bottom:1px solid rgba(201,168,76,.3); margin-bottom:32px; position:relative; z-index:1; }
+    .dl-title { font-family:'Playfair Display',serif; font-size:30px; font-weight:700; background:linear-gradient(135deg,#C9A84C,#F5E9C8); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .dl-subtitle { font-size:12px; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,.4); margin-top:4px; }
+    .dl-logo-mark { width:52px; height:52px; border-radius:14px; background:linear-gradient(135deg,#C9A84C,#E8C96B); display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:700; color:#000; }
+    .dl-accounts { display:grid; grid-template-columns:repeat(auto-fill,minmax(370px,1fr)); gap:18px; position:relative; z-index:1; }
+    .dl-account { background:rgba(255,255,255,.04); border:1px solid rgba(201,168,76,.2); border-radius:14px; padding:20px 22px; position:relative; overflow:hidden; }
+    .dl-account::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,#C9A84C,#E8C96B,#C9A84C); }
+    .dl-acc-header { display:flex; align-items:center; gap:12px; margin-bottom:14px; }
+    .dl-bank-icon { width:38px; height:38px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:700; flex-shrink:0; }
+    .dl-bank-name { font-size:14px; font-weight:600; color:#fff; }
+    .dl-bank-type { font-size:10px; color:rgba(255,255,255,.4); letter-spacing:1px; text-transform:uppercase; }
+    .dl-field { margin-bottom:10px; }
+    .dl-field-label { font-size:9px; letter-spacing:1.5px; text-transform:uppercase; color:#C9A84C; margin-bottom:2px; font-weight:500; }
+    .dl-field-value { font-family:'DM Mono',monospace; font-size:12px; color:rgba(255,255,255,.85); word-break:break-all; }
+    .dl-field-value.name { font-family:'DM Sans',sans-serif; font-size:14px; font-weight:600; }
+    .dl-footer { margin-top:30px; padding-top:20px; border-top:1px solid rgba(201,168,76,.15); display:flex; align-items:center; justify-content:space-between; position:relative; z-index:1; }
+    .dl-footer-text,.dl-footer-date { font-size:11px; color:rgba(255,255,255,.25); letter-spacing:1px; }
+  </style>`;
+
+  canvas.innerHTML = styles + buildDownloadHTML();
+
+  await new Promise(r => setTimeout(r, 600));
+
+  const el = canvas.querySelector('.dl-card');
+  const c = await html2canvas(el, {
+    scale: 2,
+    useCORS: true,
+    backgroundColor: '#0A1628',
+    logging: false
+  });
+  const link = document.createElement('a');
+  link.download = 'bank-accounts.jpg';
+  link.href = c.toDataURL('image/jpeg', 0.95);
+  link.click();
+}
+
+render();
+</script>
 </body>
 </html>
