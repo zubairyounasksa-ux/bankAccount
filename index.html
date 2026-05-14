@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bank Account Details</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&family=Roboto:wght@400;500;700&family=Lato:wght@400;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&family=Roboto:wght@400;500;700&family=Lato:wght@400;700&family=Nunito+Sans:wght@400;600;700&family=Raleway:wght@400;500;600;700&family=Rubik:wght@400;500;600;700&family=Work+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Oswald:wght@400;500;600;700&family=Libre+Baskerville:wght@400;700&family=Roboto+Mono:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Source+Code+Pro:wght@400;500;600;700&family=Fira+Code:wght@400;500;600;700&family=Ubuntu+Mono:wght@400;700&family=Noto+Sans+Mono:wght@400;500;600;700&family=Azeret+Mono:wght@400;500;600;700&family=Inconsolata:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <!-- Required for Download Image -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -34,6 +34,7 @@
     --dl-letter-spacing: 0px;
     --dl-font-family: 'DM Sans', sans-serif;
     --dl-mono-family: 'DM Mono', monospace;
+    --dl-number-family: 'Roboto Mono', 'DM Mono', monospace;
     --dl-font-style: normal;
     --dl-font-weight: 400;
     --dl-heading-weight: 700;
@@ -43,6 +44,7 @@
     --screen-card-border: var(--border);
     --screen-font-family: 'DM Sans', sans-serif;
     --screen-title-family: 'DM Sans', sans-serif;
+    --screen-number-family: 'Roboto Mono', 'DM Mono', monospace;
     --screen-font-style: normal;
     --screen-font-weight: 400;
     --screen-heading-weight: 600;
@@ -258,7 +260,7 @@
     font-weight: 500;
   }
   .field-value {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--screen-number-family);
     font-size: calc(13.5px * var(--screen-scale));
     color: var(--screen-text);
     word-break: break-all;
@@ -494,7 +496,7 @@
     font-weight: var(--dl-heading-weight);
   }
   .dl-field-value {
-    font-family: var(--dl-mono-family);
+    font-family: var(--dl-number-family);
     font-size: calc(12px * var(--dl-scale));
     color: rgba(255,255,255,.85);
     word-break: break-word;
@@ -591,7 +593,30 @@
       <option value="'Roboto', sans-serif">Roboto</option>
       <option value="'Lato', sans-serif">Lato</option>
       <option value="'Nunito Sans', sans-serif">Nunito Sans</option>
+      <option value="'Raleway', sans-serif">Raleway</option>
+      <option value="'Rubik', sans-serif">Rubik</option>
+      <option value="'Work Sans', sans-serif">Work Sans</option>
+      <option value="'Plus Jakarta Sans', sans-serif">Plus Jakarta Sans</option>
+      <option value="'Oswald', sans-serif">Oswald</option>
+      <option value="'Libre Baskerville', serif">Libre Baskerville</option>
       <option value="'Playfair Display', serif">Playfair Display</option>
+    </select>
+  </div>
+
+  <div class="control-group">
+    <label>Number Font</label>
+    <select id="numberFontControl">
+      <option value="'Roboto Mono', 'DM Mono', monospace">Roboto Mono</option>
+      <option value="'DM Mono', monospace">DM Mono</option>
+      <option value="'IBM Plex Mono', monospace">IBM Plex Mono</option>
+      <option value="'JetBrains Mono', monospace">JetBrains Mono</option>
+      <option value="'Space Mono', monospace">Space Mono</option>
+      <option value="'Source Code Pro', monospace">Source Code Pro</option>
+      <option value="'Fira Code', monospace">Fira Code</option>
+      <option value="'Ubuntu Mono', monospace">Ubuntu Mono</option>
+      <option value="'Noto Sans Mono', monospace">Noto Sans Mono</option>
+      <option value="'Azeret Mono', monospace">Azeret Mono</option>
+      <option value="'Inconsolata', monospace">Inconsolata</option>
     </select>
   </div>
 
@@ -780,6 +805,7 @@ function escapeHTML(value) {
 
 function getDownloadSettings() {
   const fontFamily = document.getElementById('fontFamilyControl').value || "'DM Sans', sans-serif";
+  const numberFont = document.getElementById('numberFontControl').value || "'Roboto Mono', 'DM Mono', monospace";
   const fontStyleValue = document.getElementById('fontStyleControl').value || 'normal';
   const styleMap = {
     normal: { fontStyle: 'normal', fontWeight: 400, headingWeight: 700, titleFamily: fontFamily },
@@ -799,6 +825,7 @@ function getDownloadSettings() {
   if (bgKey === 'custom') {
     return {
       fontFamily,
+      numberFont,
       titleFamily: fontStyleConfig.titleFamily,
       fontStyle: fontStyleConfig.fontStyle,
       fontWeight: fontStyleConfig.fontWeight,
@@ -814,6 +841,7 @@ function getDownloadSettings() {
   const bg = BG_THEMES[bgKey] || BG_THEMES.navy;
   return {
     fontFamily,
+    numberFont,
     titleFamily: fontStyleConfig.titleFamily,
     fontStyle: fontStyleConfig.fontStyle,
     fontWeight: fontStyleConfig.fontWeight,
@@ -834,6 +862,7 @@ function applyLiveCardSettings() {
 
   root.style.setProperty('--screen-font-family', s.fontFamily);
   root.style.setProperty('--screen-title-family', s.titleFamily);
+  root.style.setProperty('--screen-number-family', s.numberFont);
   root.style.setProperty('--screen-font-style', s.fontStyle);
   root.style.setProperty('--screen-font-weight', s.fontWeight);
   root.style.setProperty('--screen-heading-weight', s.headingWeight);
@@ -867,6 +896,7 @@ function applyDownloadSettings() {
   document.documentElement.style.setProperty('--dl-scale', `${s.fontSize / 100}`);
   document.documentElement.style.setProperty('--dl-letter-spacing', `${s.letterSpacing}px`);
   document.documentElement.style.setProperty('--dl-font-family', s.fontFamily);
+  document.documentElement.style.setProperty('--dl-number-family', s.numberFont);
   document.documentElement.style.setProperty('--dl-font-style', s.fontStyle);
   document.documentElement.style.setProperty('--dl-font-weight', s.fontWeight);
   document.documentElement.style.setProperty('--dl-heading-weight', s.headingWeight);
@@ -1182,6 +1212,7 @@ async function downloadImage() {
 }
 
 document.getElementById('fontFamilyControl').addEventListener('change', applyDownloadSettings);
+document.getElementById('numberFontControl').addEventListener('change', applyDownloadSettings);
 document.getElementById('fontStyleControl').addEventListener('change', applyDownloadSettings);
 document.getElementById('fontSizeControl').addEventListener('input', applyDownloadSettings);
 document.getElementById('letterSpacingControl').addEventListener('input', applyDownloadSettings);
