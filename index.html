@@ -37,6 +37,19 @@
     --dl-font-style: normal;
     --dl-font-weight: 400;
     --dl-heading-weight: 700;
+
+    /* Live on-screen card preview controls */
+    --screen-card-bg: var(--card-bg);
+    --screen-card-border: var(--border);
+    --screen-font-family: 'DM Sans', sans-serif;
+    --screen-title-family: 'DM Sans', sans-serif;
+    --screen-font-style: normal;
+    --screen-font-weight: 400;
+    --screen-heading-weight: 600;
+    --screen-scale: 1;
+    --screen-letter-spacing: 0px;
+    --screen-text: var(--text);
+    --screen-muted: var(--text-muted);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -183,9 +196,13 @@
   }
 
   .account-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
+    background: var(--screen-card-bg);
+    border: 1px solid var(--screen-card-border);
     border-radius: var(--radius);
+    font-family: var(--screen-font-family);
+    font-style: var(--screen-font-style);
+    font-weight: var(--screen-font-weight);
+    letter-spacing: var(--screen-letter-spacing);
     padding: 24px;
     position: relative;
     overflow: hidden;
@@ -218,21 +235,23 @@
     flex-shrink: 0;
   }
   .bank-name {
-    font-weight: 600;
-    font-size: 15px;
-    color: var(--text);
+    font-family: var(--screen-title-family);
+    font-weight: var(--screen-heading-weight);
+    font-size: calc(15px * var(--screen-scale));
+    color: var(--screen-text);
+    letter-spacing: var(--screen-letter-spacing);
   }
   .bank-type {
-    font-size: 11px;
-    color: var(--text-muted);
-    letter-spacing: 1px;
+    font-size: calc(11px * var(--screen-scale));
+    color: var(--screen-muted);
+    letter-spacing: calc(1px + var(--screen-letter-spacing));
     text-transform: uppercase;
   }
 
   .card-field { margin-bottom: 14px; }
   .field-label {
-    font-size: 10px;
-    letter-spacing: 1.5px;
+    font-size: calc(10px * var(--screen-scale));
+    letter-spacing: calc(1.5px + var(--screen-letter-spacing));
     text-transform: uppercase;
     color: var(--gold);
     margin-bottom: 4px;
@@ -240,10 +259,11 @@
   }
   .field-value {
     font-family: 'DM Mono', monospace;
-    font-size: 13.5px;
-    color: var(--text);
+    font-size: calc(13.5px * var(--screen-scale));
+    color: var(--screen-text);
     word-break: break-all;
     line-height: 1.5;
+    letter-spacing: var(--screen-letter-spacing);
   }
   .field-value.large {
     font-family: 'DM Sans', sans-serif;
@@ -264,13 +284,13 @@
     flex: 1;
     padding: 8px;
     border-radius: 8px;
-    font-size: 12px;
+    font-size: calc(12px * var(--screen-scale));
     font-weight: 500;
     cursor: pointer;
     border: 1.5px solid var(--border);
     background: transparent;
-    color: var(--text-muted);
-    font-family: 'DM Sans', sans-serif;
+    color: var(--screen-muted);
+    font-family: var(--screen-font-family);
     transition: all .2s;
     display: flex; align-items: center; justify-content: center; gap: 5px;
   }
@@ -560,7 +580,7 @@
 
 <div class="control-panel">
   <div class="control-group">
-    <label>Download Font</label>
+    <label>Font Family</label>
     <select id="fontFamilyControl">
       <option value="'DM Sans', sans-serif">DM Sans</option>
       <option value="'Inter', sans-serif">Inter</option>
@@ -806,12 +826,52 @@ function getDownloadSettings() {
   };
 }
 
+
+function applyLiveCardSettings() {
+  const s = getDownloadSettings();
+  const root = document.documentElement;
+  const isLight = s.textMode === 'light';
+
+  root.style.setProperty('--screen-font-family', s.fontFamily);
+  root.style.setProperty('--screen-title-family', s.titleFamily);
+  root.style.setProperty('--screen-font-style', s.fontStyle);
+  root.style.setProperty('--screen-font-weight', s.fontWeight);
+  root.style.setProperty('--screen-heading-weight', s.headingWeight);
+  root.style.setProperty('--screen-scale', `${s.fontSize / 100}`);
+  root.style.setProperty('--screen-letter-spacing', `${s.letterSpacing}px`);
+  root.style.setProperty('--screen-card-bg', s.bgCss);
+  root.style.setProperty('--screen-card-border', isLight ? 'rgba(201,168,76,.45)' : 'rgba(201,168,76,.25)');
+  root.style.setProperty('--screen-text', isLight ? '#172033' : '#E6EDF3');
+  root.style.setProperty('--screen-muted', isLight ? 'rgba(23,32,51,.62)' : '#8B949E');
+
+  const cards = document.querySelectorAll('.account-card');
+  cards.forEach(card => {
+    card.style.background = s.bgCss;
+    card.style.fontFamily = s.fontFamily;
+    card.style.fontStyle = s.fontStyle;
+    card.style.fontWeight = s.fontWeight;
+
+    if (isLight) {
+      card.style.boxShadow = '0 12px 34px rgba(0,0,0,.12)';
+    } else {
+      card.style.boxShadow = '';
+    }
+  });
+}
+
 function applyDownloadSettings() {
   const s = getDownloadSettings();
   document.documentElement.style.setProperty('--download-bg', s.bgCss);
   document.documentElement.style.setProperty('--download-bg-solid', s.bgSolid);
   document.documentElement.style.setProperty('--dl-font-size', `${s.fontSize}%`);
+  document.documentElement.style.setProperty('--dl-scale', `${s.fontSize / 100}`);
   document.documentElement.style.setProperty('--dl-letter-spacing', `${s.letterSpacing}px`);
+  document.documentElement.style.setProperty('--dl-font-family', s.fontFamily);
+  document.documentElement.style.setProperty('--dl-font-style', s.fontStyle);
+  document.documentElement.style.setProperty('--dl-font-weight', s.fontWeight);
+  document.documentElement.style.setProperty('--dl-heading-weight', s.headingWeight);
+
+  applyLiveCardSettings();
 
   document.getElementById('fontSizeLabel').textContent = `${s.fontSize}%`;
   document.getElementById('letterSpacingLabel').textContent = `${s.letterSpacing.toFixed(1)}px`;
@@ -865,6 +925,7 @@ function render() {
       </div>
     </div>`;
   }).join('');
+  applyLiveCardSettings();
 }
 
 function openAddModal() {
