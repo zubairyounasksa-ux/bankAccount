@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FinSight Financial Analyzer</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f4f7fb;
+      overflow: hidden;
+    }
+
+    .app-shell {
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: #f4f7fb;
+    }
+
+    .top-bar {
+      height: 58px;
+      background: linear-gradient(135deg, #083344, #0f766e);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+      z-index: 2;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .brand-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.16);
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      flex: 0 0 auto;
+    }
+
+    .brand-text h1 {
+      font-size: 16px;
+      line-height: 1.2;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .brand-text p {
+      font-size: 11px;
+      opacity: 0.75;
+      margin-top: 1px;
+      white-space: nowrap;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 0 0 auto;
+    }
+
+    .btn {
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: 0.2s ease;
+    }
+
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.22);
+    }
+
+    .frame-wrap {
+      position: relative;
+      flex: 1;
+      min-height: 0;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+      background: #ffffff;
+    }
+
+    .loader {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f4f7fb;
+      z-index: 1;
+      transition: opacity 0.25s ease, visibility 0.25s ease;
+    }
+
+    .loader.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .loader-card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 24px 28px;
+      text-align: center;
+      box-shadow: 0 12px 35px rgba(15, 23, 42, 0.12);
+    }
+
+    .spinner {
+      width: 34px;
+      height: 34px;
+      border: 4px solid #dbeafe;
+      border-top-color: #0f766e;
+      border-radius: 50%;
+      margin: 0 auto 12px;
+      animation: spin 0.8s linear infinite;
+    }
+
+    .loader-card h2 {
+      font-size: 15px;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+
+    .loader-card p {
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 640px) {
+      .top-bar {
+        height: 54px;
+        padding: 0 12px;
+      }
+
+      .brand-text h1 {
+        font-size: 14px;
+      }
+
+      .brand-text p {
+        display: none;
+      }
+
+      .btn {
+        padding: 7px 9px;
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="top-bar">
+      <div class="brand">
+        <div class="brand-icon">YC</div>
+        <div class="brand-text">
+          <h1>FinSight Financial Analyzer</h1>
+          <p>Youngs Capital — AI Financial Screenshot System</p>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn" type="button" onclick="reloadApp()">Refresh</button>
+        <a class="btn" href="https://script.google.com/macros/s/AKfycbzxncaxpw-W_k-3e6QYyztaK9lsso70QERBVSd-usC-Hr-w8PhHMJovF1t8By1SVVLo0g/exec" target="_blank" rel="noopener">Open Full App</a>
+      </div>
+    </header>
+
+    <main class="frame-wrap">
+      <div class="loader" id="loader">
+        <div class="loader-card">
+          <div class="spinner"></div>
+          <h2>Loading FinSight...</h2>
+          <p>Please wait while the financial analyzer opens.</p>
+        </div>
+      </div>
+
+      <iframe
+        id="finsightFrame"
+        src="https://script.google.com/macros/s/AKfycbzxncaxpw-W_k-3e6QYyztaK9lsso70QERBVSd-usC-Hr-w8PhHMJovF1t8By1SVVLo0g/exec"
+        title="FinSight Financial Analyzer"
+        allow="clipboard-read; clipboard-write; fullscreen"
+        onload="hideLoader()">
+      </iframe>
+    </main>
+  </div>
+
+  <script>
+    const frame = document.getElementById('finsightFrame');
+    const loader = document.getElementById('loader');
+
+    function hideLoader() {
+      loader.classList.add('hidden');
+    }
+
+    function reloadApp() {
+      loader.classList.remove('hidden');
+      frame.src = frame.src;
+    }
+  </script>
+</body>
+</html>
